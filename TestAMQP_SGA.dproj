@@ -90,10 +90,26 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\untPrincipal.pas">
-            <Form>Form1</Form>
-            <FormType>dfm</FormType>
+        <DCCReference Include="untPrincipal.pas">
+            <Form>frmPrincipal</Form>
         </DCCReference>
+        <DCCReference Include="AMQP_Source\AMQP.Arguments.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Channel.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Classes.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Connection.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Frame.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Header.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Helper.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.IMessageProperties.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Interfaces.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Message.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.MessageProperties.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Method.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Payload.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Protocol.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.StreamHelper.pas"/>
+        <DCCReference Include="AMQP_Source\amqp.syncobjs.pas"/>
+        <DCCReference Include="AMQP_Source\AMQP.Types.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
