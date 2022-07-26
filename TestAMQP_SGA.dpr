@@ -18,7 +18,6 @@ uses
   AMQP.Payload in 'AMQP_Source\AMQP.Payload.pas',
   AMQP.Protocol in 'AMQP_Source\AMQP.Protocol.pas',
   AMQP.StreamHelper in 'AMQP_Source\AMQP.StreamHelper.pas',
-  amqp.syncobjs in 'AMQP_Source\amqp.syncobjs.pas',
   AMQP.Types in 'AMQP_Source\AMQP.Types.pas';
 
 {$R *.res}

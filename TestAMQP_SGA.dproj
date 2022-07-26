@@ -108,7 +108,6 @@
         <DCCReference Include="AMQP_Source\AMQP.Payload.pas"/>
         <DCCReference Include="AMQP_Source\AMQP.Protocol.pas"/>
         <DCCReference Include="AMQP_Source\AMQP.StreamHelper.pas"/>
-        <DCCReference Include="AMQP_Source\amqp.syncobjs.pas"/>
         <DCCReference Include="AMQP_Source\AMQP.Types.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
