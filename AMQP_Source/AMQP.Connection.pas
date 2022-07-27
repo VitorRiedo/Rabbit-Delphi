@@ -9,7 +9,7 @@ Uses
   {$Else}
   System.SysUtils, System.Classes, System.Generics.Collections, System.Generics.Defaults, System.SyncObjs, VCL.ExtCtrls,
   {$EndIf}
-  IdTcpClient,
+  IdTcpClient, Vcl.Dialogs, IdComponent, IdSSLOpenSSL, IdSSL,
   AMQP.Classes, AMQP.Frame, AMQP.Header, AMQP.Method, AMQP.Protocol, AMQP.Message, AMQP.Interfaces, AMQP.IMessageProperties;
 
 Type
@@ -52,6 +52,7 @@ Type
   TAMQPConnection = Class(TSingletonImplementation, IAMQPConnection)
   Strict Private
     FTCP              : TIdTcpClient;
+    FSSL              : TIdSSLIOHandlerSocketOpenSSL;
     FChannels         : TThreadList<IAMQPChannel>;
     FServerProperties : TAMQPServerProperties;
     FMainQueue        : TAMQPQueue;
@@ -319,6 +320,12 @@ begin
   FTCP.Host         := 'localhost';
   FTCP.Port         := 5672;
   FTCP.UseNagle     := False;
+
+  //SSL Test ok
+  FSSL := TIdSSLIOHandlerSocketOpenSSL.Create;
+  FSSL.SSLOptions.SSLVersions := [sslvTLSv1_2];
+  FTCP.IOHandler := FSSL;
+
   FTimeout          := INFINITE;
   FUsername         := '';
   FPassword         := '';

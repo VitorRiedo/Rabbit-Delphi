@@ -66,20 +66,51 @@ implementation
 procedure TfrmPrincipal.btnConDescClick(Sender: TObject);
 begin
   try
-    AMQP.HeartbeatSecs := 30;
-    AMQP.Timeout       := 5000;
-    AMQP.Host          := txtHost.Text;
-    AMQP.Port          := StrToIntDef(txtPort.Text, 5671);
-    AMQP.VirtualHost   := '/';
-    AMQP.Username      := txtUsername.Text;
-    AMQP.Password      := txtPassword.Text;
-    AMQP.ApplicationID := txtApplicationID.Text;
-    AMQP.Connect;
+    if not AMQP.IsOpen then
+    begin
+      AMQP.HeartbeatSecs := 30;
+      AMQP.Timeout       := 30000;
+      AMQP.Host          := txtHost.Text;
+      AMQP.Port          := StrToIntDef(txtPort.Text, 5671);
+      AMQP.VirtualHost   := '/';
+      AMQP.Username      := txtUsername.Text;
+      AMQP.Password      := txtPassword.Text;
+      AMQP.ApplicationID := txtApplicationID.Text;
+      AMQP.Connect;
 
-    Channel := AMQP.OpenChannel;
+      Channel := AMQP.OpenChannel;
 
-    Channel.QueueDeclare( txtNameQueue1.Text, []);
-    Channel.QueueDeclare( txtNameQueue2.Text, []);
+      Channel.QueueDeclare( txtNameQueue1.Text, []);
+      Channel.QueueDeclare( txtNameQueue2.Text, []);
+
+      Channel.BasicConsume( Procedure( Msg: TAMQPMessage; var SendAck: Boolean )
+      var
+        Txt : String;
+      Begin
+        Txt := Msg.Body.AsString[ TEncoding.UTF8 ];
+        TThread.Synchronize( nil, Procedure
+                                  Begin
+                                    mmQueue2.Lines.Add( Txt );
+                                  End );
+      End,
+      txtNameQueue1.Text, 'ConsumeBlue');
+
+      Channel.BasicConsume( Procedure( Msg: TAMQPMessage; var SendAck: Boolean )
+      var
+        Txt : String;
+      Begin
+        Txt := Msg.Body.AsString[ TEncoding.UTF8 ];
+        TThread.Synchronize( nil, Procedure
+                                  Begin
+                                    mmQueue1.Lines.Add( Txt );
+                                  End );
+      End,
+      txtNameQueue2.Text, 'ConsumeBlue2');
+    end
+    else
+    begin
+      AMQP.Disconnect;
+    end;
   Except
   on E: Exception do
     begin
@@ -88,12 +119,29 @@ begin
   end;
 end;
 
+
+
+//procedure testecall( Msg: TAMQPMessage; var SendAck: Boolean);
+//var
+//   Txt : String;
+//begin
+//  Txt := Msg.Body.AsString[ TEncoding.ASCII ];
+//  TThread.Synchronize( nil, Procedure
+//  Begin
+//    mmQueue2.Lines.Add( Txt );
+//  End);
+//
+//end;
+
+
 procedure TfrmPrincipal.btnSendQueue1Click(Sender: TObject);
+var
+  text : String;
 begin
   if Channel = nil then
     raise Exception.Create('Channel not open');
 
-  Channel.BasicPublish( '', txtNameQueue1.Text, txtNameQueue1.Text +': '+txtSend1.Text );
+  Channel.BasicPublish( '', txtNameQueue1.Text, txtNameQueue1.Text +': '+mmQueue1.Text );
 end;
 
 procedure TfrmPrincipal.btnSendQueue2Click(Sender: TObject);
@@ -126,7 +174,7 @@ procedure TfrmPrincipal.tmrStatusTimer(Sender: TObject);
 var
   Msg: TAMQPMessage;
 begin
-  if AMQP.IsOpen then
+  if (Channel <> nil) and (Channel.State <> cClosed) and (AMQP.IsOpen) then
   begin
     lbStatus.Font.Color := clGreen;
     lbStatus.Caption    := 'Conexão: Open';
@@ -135,27 +183,27 @@ begin
     if Channel = nil then
       Exit;
 
-    Msg := Channel.BasicGet( txtNameQueue1.text );
-    Try
-      if Msg <> nil then
-      Begin
-        mmQueue2.Lines.Add( 'Message: ' + Msg.Body.AsString[ TEncoding.ASCII ] );
-        Msg.Ack;
-      End
-    Finally
-      Msg.Free;
-    End;
-
-    Msg := Channel.BasicGet( txtNameQueue2.text );
-    Try
-      if Msg <> nil then
-      Begin
-        mmQueue1.Lines.Add( 'Message: ' + Msg.Body.AsString[ TEncoding.ASCII ] );
-        Msg.Ack;
-      End
-    Finally
-      Msg.Free;
-    End;
+//    Msg := Channel.BasicGet( txtNameQueue1.text );
+//    Try
+//      if Msg <> nil then
+//      Begin
+//        mmQueue2.Lines.Add( 'Message: ' + Msg.Body.AsString[ TEncoding.ASCII ] );
+//        Msg.Ack;
+//      End
+//    Finally
+//      Msg.Free;
+//    End;
+//
+//    Msg := Channel.BasicGet( txtNameQueue2.text );
+//    Try
+//      if Msg <> nil then
+//      Begin
+//        mmQueue1.Lines.Add( 'Message: ' + Msg.Body.AsString[ TEncoding.ASCII ] );
+//        Msg.Ack;
+//      End
+//    Finally
+//      Msg.Free;
+//    End;
   end
   else
   begin
@@ -163,7 +211,7 @@ begin
     lbStatus.Caption    := 'Conexão: Close' ;
     btnConDesc.Caption  := 'Connect';
 
-    btnConDescClick(nil);
+    //btnConDescClick(nil);
   end;
 end;
 

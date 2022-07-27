@@ -2,7 +2,7 @@ object frmPrincipal: TfrmPrincipal
   Left = 0
   Top = 0
   Caption = 'Teste Rabbit Delphi'
-  ClientHeight = 538
+  ClientHeight = 593
   ClientWidth = 872
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -86,7 +86,6 @@ object frmPrincipal: TfrmPrincipal
     Width = 506
     Height = 21
     TabOrder = 1
-    Text = 'localhost'
   end
   object txtPort: TEdit
     Left = 610
@@ -94,7 +93,7 @@ object frmPrincipal: TfrmPrincipal
     Width = 47
     Height = 21
     TabOrder = 2
-    Text = '5672'
+    Text = '5671'
   end
   object txtUsername: TEdit
     Left = 65
@@ -102,7 +101,7 @@ object frmPrincipal: TfrmPrincipal
     Width = 161
     Height = 21
     TabOrder = 3
-    Text = 'guest'
+    Text = 'sgapetro'
   end
   object txtPassword: TEdit
     Left = 302
@@ -148,7 +147,6 @@ object frmPrincipal: TfrmPrincipal
       Top = 30
       Width = 258
       Height = 381
-      ReadOnly = True
       TabOrder = 1
     end
     object txtSend1: TEdit
@@ -195,7 +193,6 @@ object frmPrincipal: TfrmPrincipal
       Top = 30
       Width = 258
       Height = 381
-      ReadOnly = True
       TabOrder = 1
     end
     object txtSend2: TEdit
@@ -217,7 +214,7 @@ object frmPrincipal: TfrmPrincipal
   end
   object tmrStatus: TTimer
     Enabled = False
-    Interval = 300
+    Interval = 2000
     OnTimer = tmrStatusTimer
     Left = 816
     Top = 272
